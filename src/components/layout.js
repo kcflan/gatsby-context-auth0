@@ -8,7 +8,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useStaticQuery, graphql } from 'gatsby';
-import { UserProvider } from '../context/userContext';
 import Header from './header';
 import Nav from './nav';
 import './layout.css';
@@ -25,7 +24,7 @@ const Layout = ({ children }) => {
   `);
 
   return (
-    <UserProvider>
+    <>
       <Header siteTitle={data.site.siteMetadata.title} />
       <Nav />
       <div
@@ -42,7 +41,7 @@ const Layout = ({ children }) => {
           <a href="https://www.gatsbyjs.org">Gatsby</a>
         </footer>
       </div>
-    </UserProvider>
+    </>
   );
 };
 
