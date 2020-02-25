@@ -4,6 +4,7 @@ import Permission from '../components/permission';
 
 function AuthenticatedApp() {
   const user = useUser();
+
   return (
     <>
       <div style={{ border: 'solid 1px #99f' }}>
