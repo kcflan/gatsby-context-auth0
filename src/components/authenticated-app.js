@@ -12,20 +12,19 @@ function AuthenticatedApp() {
         {/* <Header />
       <Content />
       <Footer /> */}
-        <div>
-          <h2>User Profile</h2>
-          <ul>
-            <li>ID: {user.id}</li>
-            <li>Email: {user.email}</li>
-            <li>Role: {user.role}</li>
-          </ul>
-        </div>
+
         <Permission
-          role="visitor"
+          role={user.role}
           perform="home-page:visit"
+          data={{
+            userId: user.id,
+            // postOwnerId: post.ownerId,
+          }}
           yes={() => (
             <div>
               <h1>Visitor Dashboard</h1>
+              <p>userid: {user.id}</p>
+              <button className="btn btn-sm btn-danger">Delete Post</button>
             </div>
           )}
           no={() => (
