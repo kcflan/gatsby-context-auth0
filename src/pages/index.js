@@ -20,6 +20,7 @@ const IndexPage = () => {
   }, []);
 
   const { isAuthenticated, user } = useAuth();
+
   return (
     <Layout>
       <React.Suspense fallback={<>{/* spinner */}</>}>
