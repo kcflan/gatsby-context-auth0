@@ -41,6 +41,7 @@ function UserProvider(props) {
     }
   }
   const { role } = data;
+  //   console.log('data: ', data);
 
   const roleUser = { ...user, role: role }; // { ...user, role: 'visitor' };
 
@@ -59,8 +60,15 @@ export { UserProvider, useUser };
 
 const loadUserData = async () => {
   //TODO look up the role based on email address...
-  //   await fetch('https://jsonplaceholder.typicode.com/users')
-  //     .then(res => (res.ok ? res : Promise.reject(res)))
-  //     .then(res => res.json());
-  return { role: 'admin' };
+  let q = await fetch(
+    'https://jsonplaceholder.typicode.com/users?email=Julianne.OConner@kory.org'
+  )
+    .then(res => (res.ok ? res : Promise.reject(res)))
+    .then(res => res.json());
+
+  //   console.log('q: ', q);
+  let { username } = q[0];
+  //   console.log('username: ', username);
+  //   return { role: 'admin' };
+  return { role: username };
 };
