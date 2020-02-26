@@ -62,5 +62,5 @@ const loadUserData = async () => {
   //   await fetch('https://jsonplaceholder.typicode.com/users')
   //     .then(res => (res.ok ? res : Promise.reject(res)))
   //     .then(res => res.json());
-  return { role: 'visitor' };
+  return { role: 'admin' };
 };
