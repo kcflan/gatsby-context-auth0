@@ -60,15 +60,17 @@ export { UserProvider, useUser };
 
 const loadUserData = async () => {
   //TODO look up the role based on email address...
+  // 'https://jsonplaceholder.typicode.com/users?email=Julianne.OConner@kory.org'
   let q = await fetch(
-    'https://jsonplaceholder.typicode.com/users?email=Julianne.OConner@kory.org'
+    `https://my-json-server.typicode.com/kflan-io/gatsby-context-auth0`,
+    { mode: 'no-cors' }
   )
     .then(res => (res.ok ? res : Promise.reject(res)))
     .then(res => res.json());
 
-  //   console.log('q: ', q);
+  console.log('q: ', q);
   let { username } = q[0];
-  //   console.log('username: ', username);
-  //   return { role: 'admin' };
-  return { role: username };
+  console.log('username: ', username);
+  return { role: 'admin' };
+  //   return { role: username };
 };
