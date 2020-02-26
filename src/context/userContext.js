@@ -28,7 +28,11 @@ function UserProvider(props) {
 
   if (!firstAttemptFinished) {
     if (isPending) {
-      return <></>;
+      return (
+        <>
+          <h2>pending...</h2>
+        </>
+      );
       //   return <FullPageSpinner />;
     }
     if (isRejected) {
@@ -61,6 +65,9 @@ export { UserProvider, useUser };
 const loadUserData = async () => {
   //TODO look up the role based on email address...
   // 'https://jsonplaceholder.typicode.com/users?email=Julianne.OConner@kory.org'
+  //   let q = await fetch(
+  //     `https://my-json-server.typicode.com/kflan-io/gatsby-context-auth0`
+  //   )
   let q = await fetch(
     `https://my-json-server.typicode.com/kflan-io/gatsby-context-auth0`,
     { mode: 'no-cors' }
