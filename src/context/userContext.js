@@ -1,15 +1,17 @@
 import React from 'react';
 import { useAuth } from 'react-use-auth';
 import { useAsync } from 'react-async';
+import axios from 'axios';
 
 const UserContext = React.createContext();
 
 function UserProvider(props) {
-  const [firstAttemptFinished, setFirstAttemptFinished] = React.useState(false);
   const { user } = useAuth();
+  const [firstAttemptFinished, setFirstAttemptFinished] = React.useState(false);
+  //   loadUserData();
 
   const {
-    data = { user: null },
+    data = { role: null },
     error,
     isLoading,
     isRejected,
@@ -18,6 +20,9 @@ function UserProvider(props) {
     reload,
   } = useAsync({
     promiseFn: loadUserData,
+    // userEmail: user.email,
+    // userEmail: 'test@test.test',
+    userEmail: 'Shanna@melissa.tv',
   });
 
   React.useLayoutEffect(() => {
@@ -45,6 +50,7 @@ function UserProvider(props) {
     }
   }
   const { role } = data;
+  //   console.log('role: ', role);
   //   console.log('data: ', data);
 
   const roleUser = { ...user, role: role }; // { ...user, role: 'visitor' };
@@ -62,22 +68,40 @@ function useUser() {
 
 export { UserProvider, useUser };
 
-const loadUserData = async () => {
+const loadUserData = async ({ userEmail }) => {
   //TODO look up the role based on email address...
   // 'https://jsonplaceholder.typicode.com/users?email=Julianne.OConner@kory.org'
   //   let q = await fetch(
   //     `https://my-json-server.typicode.com/kflan-io/gatsby-context-auth0`
   //   )
-  let q = await fetch(
-    `https://my-json-server.typicode.com/kflan-io/gatsby-context-auth0`,
-    { mode: 'no-cors' }
-  )
-    .then(res => (res.ok ? res : Promise.reject(res)))
-    .then(res => res.json());
+  //   let q = await fetch(
+  //     `http://my-json-server.typicode.com/kflan-io/gatsby-context-auth0/users`,
+  //     { mode: 'no-cors' }
+  //   )
+  //     .then(res => (res.ok ? res : Promise.reject(res)))
+  //     .then(res => res.json());
+  let axiosRole = await axios
+    // .get(
+    //   `http://my-json-server.typicode.com/kflan-io/gatsby-context-auth0/users?email=test@test.test`
+    // )
+    .get(
+      `http://my-json-server.typicode.com/kflan-io/gatsby-context-auth0/users?email=${userEmail}`
+    )
+    .then(res => {
+      // Transform the raw data by extracting the nested objects
+      const users = res.data.map(obj => obj);
+      console.log('all users: ', users);
+      console.log('users[0]: ', users[0]);
+      let { role } = users[0];
 
-  console.log('q: ', q);
-  let { username } = q[0];
-  console.log('username: ', username);
-  return { role: 'admin' };
-  //   return { role: username };
+      return { role: role };
+    })
+    .catch(err => {
+      // Something went wrong. Log the error in state and re-render.
+      console.log('Log: Error', err);
+      return { role: 'visitor' };
+    });
+
+  return axiosRole;
+  //   return { role: 'visitor' };
 };
