@@ -8,7 +8,6 @@ const UserContext = React.createContext();
 function UserProvider(props) {
   const { user } = useAuth();
   const [firstAttemptFinished, setFirstAttemptFinished] = React.useState(false);
-  //   loadUserData();
 
   const {
     data = { role: null },
@@ -19,10 +18,11 @@ function UserProvider(props) {
     isSettled,
     reload,
   } = useAsync({
-    promiseFn: loadUserData,
+    promiseFn: loadUserRole,
     // userEmail: user.email,
     // userEmail: 'test@test.test',
-    userEmail: 'Shanna@melissa.tv',
+    // userEmail: 'Shanna@melissa.tv',
+    userEmail: 'email@doesnot.exist',
   });
 
   React.useLayoutEffect(() => {
@@ -68,40 +68,33 @@ function useUser() {
 
 export { UserProvider, useUser };
 
-const loadUserData = async ({ userEmail }) => {
-  //TODO look up the role based on email address...
-  // 'https://jsonplaceholder.typicode.com/users?email=Julianne.OConner@kory.org'
-  //   let q = await fetch(
-  //     `https://my-json-server.typicode.com/kflan-io/gatsby-context-auth0`
-  //   )
+const loadUserRole = async ({ userEmail }) => {
   //   let q = await fetch(
   //     `http://my-json-server.typicode.com/kflan-io/gatsby-context-auth0/users`,
   //     { mode: 'no-cors' }
   //   )
   //     .then(res => (res.ok ? res : Promise.reject(res)))
   //     .then(res => res.json());
+
+  let url = `http://my-json-server.typicode.com/kflan-io/gatsby-context-auth0/users?email=${userEmail}`;
   let axiosRole = await axios
-    // .get(
-    //   `http://my-json-server.typicode.com/kflan-io/gatsby-context-auth0/users?email=test@test.test`
-    // )
-    .get(
-      `http://my-json-server.typicode.com/kflan-io/gatsby-context-auth0/users?email=${userEmail}`
-    )
+    .get(url)
     .then(res => {
       // Transform the raw data by extracting the nested objects
       const users = res.data.map(obj => obj);
       console.log('all users: ', users);
       console.log('users[0]: ', users[0]);
+      //using users[0] to take the first entry with that email address
       let { role } = users[0];
 
       return { role: role };
     })
     .catch(err => {
-      // Something went wrong. Log the error in state and re-render.
-      console.log('Log: Error', err);
+      // Something went wrong. Log the error and and re-render with default visitor role.
+      console.log('Log:  Error', err);
       return { role: 'visitor' };
     });
 
-  return axiosRole;
   //   return { role: 'visitor' };
+  return axiosRole;
 };
